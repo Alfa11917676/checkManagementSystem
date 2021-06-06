@@ -7,8 +7,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter.messagebox
 import os
-import mysql.connector
-
+import mysql.connectory
 
 
 class gui:
@@ -52,30 +51,22 @@ class gui:
                 return
         def reset(label):
             self.entCheckNumber.delete(0,END)
-            self.entissueDate.delete(0,END)
+            #self.entissueDate.delete(0,END)
             self.entpartyName.delete(0,END)
             self.entAmount.delete(0,END)
-            self.entPassDate.delete(0,END)
+            #self.entPassDate.delete(0,END)
             finalSum(label)
         def addData(label):
             if chequeNumber.get()=="" or issueDate.get()=="" or partyName.get()=="" or amount.get()=="":
                 tkinter.messagebox.showerror("PMH","Enter the values correctly")
             else:
+
                 myDataBase = mysql.connector.connect(host="localhost", user="root", passwd="12345",database='pmh')
                 mycursor = myDataBase.cursor()
-                unformatedDate=issueDate.get ()
-                passData=passDate.get()
+                dataCollection = 'Insert into checks (chequeNumber,issuedate,partyName, amount,passDate) values (%s,%s,%s,%s,%s)'
+                datas = [(chequeNumber.get(), issueDate.get(), partyName.get(), amount.get(), passDate.get())]
 
-
-                unformatedDate=unformatedDate.split('-')
-                assignDate = [unformatedDate[2] + '-' + unformatedDate[1] + '-' + unformatedDate[0]]
-                assignDate = str(assignDate)
-                cheque=chequeNumber.get()
-                party=partyName.get()
-                amt=amount.get()
-
-
-                mycursor.execute( f'Insert into checks chequeNumber="{cheque}",issuedate="{assignDate[2:12]}",partyName="{party}",amount={amt},passDate="{paDate}"')
+                mycursor.executemany(dataCollection, datas)
                 myDataBase.commit()
                 myDataBase.close()
                 finalSum(label)
