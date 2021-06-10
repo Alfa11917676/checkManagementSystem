@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter.messagebox
 import os
-import mysql.connectory
+import mysql.connector
 
 
 class gui:
